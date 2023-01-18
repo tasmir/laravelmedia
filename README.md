@@ -1,2 +1,0 @@
-# laravelmedia
-Laravel Media

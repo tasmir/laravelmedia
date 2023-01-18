@@ -1,0 +1,16 @@
+{
+    "name": "tasmir/laravelmedia",
+    "description": "Laravel Media",
+    "autoload": {
+        "psr-4": {
+            "Tasmir\\LaravelMedia\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tasmir Ahmed",
+            "email": "tasmir.cse@gmail.com"
+        }
+    ],
+    "require": {}
+}
