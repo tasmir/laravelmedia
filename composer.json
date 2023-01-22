@@ -1,16 +1,19 @@
 {
     "name": "tasmir/laravelmedia",
     "description": "Laravel Media",
-    "autoload": {
-        "psr-4": {
-            "Tasmir\\LaravelMedia\\": "src/"
-        }
-    },
+    "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Tasmir Ahmed",
             "email": "tasmir.cse@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Tasmir\\LaravelMedia\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
     "require": {}
 }
