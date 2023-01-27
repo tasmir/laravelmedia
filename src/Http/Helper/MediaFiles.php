@@ -24,7 +24,7 @@ trait MediaFiles
             $file->storeAs('public/'.$path, $file_name);
 //            return $path . "/" . $file_name;
             $data['size'] = $this->getFileSize($path."/".$file_name);
-            $data['dimension'] = $this->getImageDimension(asset('public/storage/'.$path."/".$file_name));
+            $data['dimension'] = $this->getImageDimension(asset('storage/'.$path."/".$file_name));
             $data["original_path"] = $path."/".$file_name;
             return $data;
         }

@@ -36,7 +36,7 @@ class LaravelMediaController extends Controller
                 $media_data_array = $this->mediaFileUploadHelper($file);
 
                 $media_data = Media::create($media_data_array);
-                $media_data["image"] = asset('public/storage/'.$media_data->original_path);
+                $media_data["image"] = asset('storage/'.$media_data->original_path);
                 $media_data["public_path"] =route("media.file", $media_data->slug);
                 $media_data["updated"] = date("Y-m-d h:i a", strtotime($media_data->updated_at));
 
