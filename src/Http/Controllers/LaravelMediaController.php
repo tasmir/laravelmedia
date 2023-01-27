@@ -105,13 +105,8 @@ class LaravelMediaController extends Controller
         $data = [];
         $all_medias = Media::latest('id')->get();
         foreach ($all_medias as $key => $media) {
-//            $media["image"] = asset('public/storage/'.$media->original_path);
-//            $media["public_path"] = route("media.file", $media->slug);
-//            $media["updated_at"] = date("Y-m-d h:i", strtotime($media->updated_at));
             $media["updated"] = date("Y-m-d", strtotime($media->updated_at));
-//            echo date("Y-m-d", strtotime($media->updated_at));
             $data[] = $media;
-//            echo "<br>";
         }
         return $data;
     }

@@ -30,7 +30,7 @@
         .media-modal {
             /*padding: 1rem;*/
             position: absolute;
-            z-index: 2;
+            z-index: 1040;
             left: 1.5rem;
             top: 1.5rem;
             bottom: 1.5rem;
@@ -233,7 +233,7 @@
 <script>
     async function fetchMedia( div1) {
         let base_url = window.location.origin;
-        let url = base_url + "/fetch-media"
+        let url = base_url + "/library/fetch-media"
         const response = await fetch(url);
         data = await response.json();
         let mediaModal = document.createElement('div');
@@ -276,7 +276,7 @@
         mModalMediasForm.classList.add("dropzone");
         mModalMediasForm.classList.add("hidden");
         mModalMediasForm.setAttribute('id', "myAwesomeDropzone");
-        mModalMediasForm.setAttribute('action', base_url + '/media-upload');
+        mModalMediasForm.setAttribute('action', base_url + '/library/media-upload');
         mModalMediasForm.setAttribute('method', "post");
         mModalMediasForm.style.height = "90%";
         mModalMediasForm.style.border = "0";
