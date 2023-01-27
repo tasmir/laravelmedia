@@ -37,7 +37,7 @@ class Media extends Model
         });
     }
 
-    public function generateSlug($name)
+    public static function generateSlug($name)
     {
         if (static::whereSlug($slug = Str::slug($name))->exists()) {
             $max = static::whereName($name)->latest('id')->skip(1)->value('slug');
