@@ -1,26 +1,27 @@
-<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-    type="text/css"
-/>
+@auth
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+        type="text/css"
+    />
 
-<script>
-    var data = [];
-    var selectedItem = null;
-    const LaravelMedia = class {
-        constructor(selector) {
-            document.querySelectorAll(`${selector}`).forEach(this.myFunction);
-        }
+    <script>
+        var data = [];
+        var selectedItem = null;
+        const LaravelMedia = class {
+            constructor(selector) {
+                document.querySelectorAll(`${selector}`).forEach(this.myFunction);
+            }
 
-        myFunction(item) {
-            item.addEventListener("click", function (e) {
-                e.preventDefault();
+            myFunction(item) {
+                item.addEventListener("click", function (e) {
+                    e.preventDefault();
 
-                const div1 = document.createElement('div');
-                div1.classList.add("modal-of-media");
-                document.body.appendChild(div1);
-                div1.innerHTML = `<style>
+                    const div1 = document.createElement('div');
+                    div1.classList.add("modal-of-media");
+                    document.body.appendChild(div1);
+                    div1.innerHTML = `<style>
         :root {
             --mp: 1rem;
             --m-bg: #ffffff;
@@ -219,189 +220,191 @@
 
 
     </style>`;
-                selectedItem = this;
-                fetchMedia(div1);
-                // this.setAttribute('type', 'text');
+                    selectedItem = this;
+                    fetchMedia(div1);
+                    // this.setAttribute('type', 'text');
 
-            })
-        }
-    }
-    new LaravelMedia('input[type=file]');
-
-
-</script>
-<script>
-    async function fetchMedia( div1) {
-        let base_url = window.location.origin;
-        let url = base_url + "/library/fetch-media"
-        const response = await fetch(url);
-        data = await response.json();
-        let mediaModal = document.createElement('div');
-        mediaModal.classList.add("media-modal");
-
-        let mModelHeader = document.createElement('div');
-        mModelHeader.classList.add("m-modal-header");
-        let mHTitle = document.createElement('div');
-        mHTitle.classList.add("m-h-title");
-        let mHh2 = document.createElement('h2');
-        mHh2.innerHTML = "Select or Upload Media";
-        mHh2.style.margin = "0";
-
-        let mHButtons = document.createElement('div');
-        mHButtons.classList.add("m-h-buttons");
-        let btnClose = document.createElement('button');
-        btnClose.classList.add("btn-close");
-        btnClose.innerHTML = "x";
-
-        let mModalBody = document.createElement('div');
-        mModalBody.classList.add("m-modal-body");
-
-        let mMediaBox = document.createElement('div');
-        mMediaBox.classList.add("m-media-box");
-
-        let mOptionButtons = document.createElement('div');
-        mOptionButtons.classList.add("m-option-buttons");
-        let mOptionButtons1 = document.createElement('button');
-        mOptionButtons1.innerHTML = "Upload";
-        mOptionButtons1.dataset.content = "dropzone";
-
-        let mOptionButtons2 = document.createElement('button');
-        mOptionButtons2.classList.add("m-button-selected");
-        mOptionButtons2.innerHTML = "Media";
-        mOptionButtons2.dataset.content = "m-modal-medias";
-        mOptionButtons.appendChild(mOptionButtons1);
-        mOptionButtons.appendChild(mOptionButtons2);
-
-        let mModalMediasForm = document.createElement('form');
-        mModalMediasForm.classList.add("dropzone");
-        mModalMediasForm.classList.add("hidden");
-        mModalMediasForm.setAttribute('id', "myAwesomeDropzone");
-        mModalMediasForm.setAttribute('action', base_url + '/library/media-upload');
-        mModalMediasForm.setAttribute('method', "post");
-        mModalMediasForm.style.height = "90%";
-        mModalMediasForm.style.border = "0";
-
-        mModalMediasForm.innerHTML = `{{csrf_field()}}`;
-        let inputFile = document.createElement('input');
-        inputFile.setAttribute('type', 'file');
-        inputFile.setAttribute('name', 'file');
-        inputFile.setAttribute('hidden', 'hidden');
-        mModalMediasForm.appendChild(inputFile);
-
-        let mModalMedias = document.createElement('div');
-        mModalMedias.classList.add("m-modal-medias");
-        mModalMedias.style.height = "90%";
-        mModalMedias.style.border = "0";
-
-        // let csrf =document.createElement('input')
-        // csrf.setAttribute("value","{{--csrf_field()--}}")
-        // csrf.setAttribute('type','hidden');
-        // csrf.setAttribute("name","_token");
-        // mModalMedias.appendChild(csrf);
-
-
-        for (let i = 0; i < data.length; i++) {
-            let mThumbnail = document.createElement('div');
-            mThumbnail.classList.add("m-thumbnail");
-            mThumbnail.dataset.id = data[i]['id'];
-            mThumbnail.dataset.index = i;
-            let mThumbnailImage = document.createElement('img');
-            mThumbnailImage.src = data[i]['image'];
-
-            mThumbnail.appendChild(mThumbnailImage);
-            mModalMedias.appendChild(mThumbnail);
-        }
-
-        let mThumbnailDetails = document.createElement('div');
-        mThumbnailDetails.classList.add("m-thumbnail-details");
-
-
-        let mModalFooter = document.createElement('div');
-        mModalFooter.classList.add("m-modal-footer");
-        let mSelectButton = document.createElement('button');
-        mSelectButton.classList.add("m-select-button");
-        mSelectButton.innerHTML = "Select";
-
-        let overlay = document.createElement('div');
-        overlay.classList.add("overlay");
-
-        mHTitle.appendChild(mHh2);
-        mHButtons.appendChild(btnClose);
-        mModelHeader.appendChild(mHTitle);
-        mModelHeader.appendChild(mHButtons);
-
-        mMediaBox.appendChild(mOptionButtons);
-        mMediaBox.appendChild(mModalMediasForm);
-        mMediaBox.appendChild(mModalMedias);
-        mModalBody.appendChild(mMediaBox);
-        mModalBody.appendChild(mThumbnailDetails);
-
-        mModalFooter.appendChild(mSelectButton);
-        mediaModal.appendChild(mModelHeader);
-        mediaModal.appendChild(mModalBody);
-        mediaModal.appendChild(mModalFooter);
-
-        div1.appendChild(mediaModal)
-        div1.appendChild(overlay)
-
-
-        /**/
-        var dropzone = new Dropzone('#myAwesomeDropzone', {
-
-            thumbnailWidth: 200,
-
-            maxFilesize: 10,
-
-            acceptedFiles: ".jpeg,.jpg,.png,.gif"
-
-        });
-        /**/
-
-        const modal = document.querySelector(".media-modal");
-        // const overlay = document.querySelector(".overlay");
-        // const openModalBtn = document.querySelector(".btn-open");
-        const closeModalBtn = document.querySelector(".btn-close");
-
-        // close modal function
-        // const closeModal = function () {
-        //     modal.classList.add("hidden");
-        //     overlay.classList.add("hidden");
-        //     div1.remove();
-        //     // console.log(event.parentElement.remove())
-        //     // modal-of-media
-        // };
-
-        // close the modal when the close button and overlay is clicked
-        closeModalBtn.addEventListener("click", closeModal);
-        overlay.addEventListener("click", closeModal);
-
-        // close modal when the Esc key is pressed
-        document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-                closeModal();
+                })
             }
-        });
+        }
+        new LaravelMedia('input[type=file]');
 
-        // open modal function
-        const openModal = function () {
-            modal.classList.remove("hidden");
-            overlay.classList.remove("hidden");
+
+    </script>
+    <script>
+        async function fetchMedia(div1) {
+            let base_url = window.location.origin;
+            let url = base_url + "/library/fetch-media"
+            const response = await fetch(url);
+            data = await response.json();
+            let mediaModal = document.createElement('div');
+            mediaModal.classList.add("media-modal");
+
+            let mModelHeader = document.createElement('div');
+            mModelHeader.classList.add("m-modal-header");
+            let mHTitle = document.createElement('div');
+            mHTitle.classList.add("m-h-title");
+            let mHh2 = document.createElement('h2');
+            mHh2.innerHTML = "Select or Upload Media";
+            mHh2.style.margin = "0";
+
+            let mHButtons = document.createElement('div');
+            mHButtons.classList.add("m-h-buttons");
+            let btnClose = document.createElement('button');
+            btnClose.classList.add("btn-close");
+            btnClose.innerHTML = "x";
+
+            let mModalBody = document.createElement('div');
+            mModalBody.classList.add("m-modal-body");
+
+            let mMediaBox = document.createElement('div');
+            mMediaBox.classList.add("m-media-box");
+
+            let mOptionButtons = document.createElement('div');
+            mOptionButtons.classList.add("m-option-buttons");
+            let mOptionButtons1 = document.createElement('button');
+            mOptionButtons1.innerHTML = "Upload";
+            mOptionButtons1.dataset.content = "dropzone";
+
+            let mOptionButtons2 = document.createElement('button');
+            mOptionButtons2.classList.add("m-button-selected");
+            mOptionButtons2.innerHTML = "Media";
+            mOptionButtons2.dataset.content = "m-modal-medias";
+            mOptionButtons.appendChild(mOptionButtons1);
+            mOptionButtons.appendChild(mOptionButtons2);
+
+            let mModalMediasForm = document.createElement('form');
+            mModalMediasForm.classList.add("dropzone");
+            mModalMediasForm.classList.add("hidden");
+            mModalMediasForm.setAttribute('id', "myAwesomeDropzone");
+            mModalMediasForm.setAttribute('action', base_url + '/library/media-upload');
+            mModalMediasForm.setAttribute('method', "post");
+            mModalMediasForm.style.height = "90%";
+            mModalMediasForm.style.border = "0";
+
+            mModalMediasForm.innerHTML = `{{csrf_field()}}`;
+            let inputFile = document.createElement('input');
+            inputFile.setAttribute('type', 'file');
+            inputFile.setAttribute('name', 'file');
+            inputFile.setAttribute('hidden', 'hidden');
+            mModalMediasForm.appendChild(inputFile);
+
+            let mModalMedias = document.createElement('div');
+            mModalMedias.classList.add("m-modal-medias");
+            mModalMedias.style.height = "90%";
+            mModalMedias.style.border = "0";
+
+            // let csrf =document.createElement('input')
+            // csrf.setAttribute("value","{{--csrf_field()--}}")
+            // csrf.setAttribute('type','hidden');
+            // csrf.setAttribute("name","_token");
+            // mModalMedias.appendChild(csrf);
+
+
+            for (let i = 0; i < data.length; i++) {
+                let mThumbnail = document.createElement('div');
+                mThumbnail.classList.add("m-thumbnail");
+                mThumbnail.dataset.id = data[i]['id'];
+                mThumbnail.dataset.index = i;
+                let mThumbnailImage = document.createElement('img');
+                mThumbnailImage.src = data[i]['image'];
+
+                mThumbnail.appendChild(mThumbnailImage);
+                mModalMedias.appendChild(mThumbnail);
+            }
+
+            let mThumbnailDetails = document.createElement('div');
+            mThumbnailDetails.classList.add("m-thumbnail-details");
+
+
+            let mModalFooter = document.createElement('div');
+            mModalFooter.classList.add("m-modal-footer");
+            let mSelectButton = document.createElement('button');
+            mSelectButton.classList.add("m-select-button");
+            mSelectButton.innerHTML = "Select";
+
+            let overlay = document.createElement('div');
+            overlay.classList.add("overlay");
+
+            mHTitle.appendChild(mHh2);
+            mHButtons.appendChild(btnClose);
+            mModelHeader.appendChild(mHTitle);
+            mModelHeader.appendChild(mHButtons);
+
+            mMediaBox.appendChild(mOptionButtons);
+            mMediaBox.appendChild(mModalMediasForm);
+            mMediaBox.appendChild(mModalMedias);
+            mModalBody.appendChild(mMediaBox);
+            mModalBody.appendChild(mThumbnailDetails);
+
+            mModalFooter.appendChild(mSelectButton);
+            mediaModal.appendChild(mModelHeader);
+            mediaModal.appendChild(mModalBody);
+            mediaModal.appendChild(mModalFooter);
+
+            div1.appendChild(mediaModal)
+            div1.appendChild(overlay)
+
+
+            /**/
+            var dropzone = new Dropzone('#myAwesomeDropzone', {
+
+                thumbnailWidth: 200,
+
+                maxFilesize: 10,
+
+                acceptedFiles: ".jpeg,.jpg,.png,.gif"
+
+            });
+            /**/
+
+            const modal = document.querySelector(".media-modal");
+            // const overlay = document.querySelector(".overlay");
+            // const openModalBtn = document.querySelector(".btn-open");
+            const closeModalBtn = document.querySelector(".btn-close");
+
+            // close modal function
+            // const closeModal = function () {
+            //     modal.classList.add("hidden");
+            //     overlay.classList.add("hidden");
+            //     div1.remove();
+            //     // console.log(event.parentElement.remove())
+            //     // modal-of-media
+            // };
+
+            // close the modal when the close button and overlay is clicked
+            closeModalBtn.addEventListener("click", closeModal);
+            overlay.addEventListener("click", closeModal);
+
+            // close modal when the Esc key is pressed
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                    closeModal();
+                }
+            });
+
+            // open modal function
+            const openModal = function () {
+                modal.classList.remove("hidden");
+                overlay.classList.remove("hidden");
+            };
+
+            // if (document.readyState === "complete") {
+            //     // Fully loaded!
+            //     console.log(document.querySelectorAll(`.m-modal-medias .m-thumbnail`).length);
+            // }
+
+            onClickMedia();
+        }
+
+        const closeModal = function () {
+
+            document.querySelector(".media-modal").classList.add("hidden");
+            document.querySelector(".overlay").classList.add("hidden");
+            document.querySelector(".modal-of-media").remove();
         };
 
-        // if (document.readyState === "complete") {
-        //     // Fully loaded!
-        //     console.log(document.querySelectorAll(`.m-modal-medias .m-thumbnail`).length);
-        // }
-
-        onClickMedia();
-    }
-    const closeModal = function () {
-
-        document.querySelector(".media-modal").classList.add("hidden");
-        document.querySelector(".overlay").classList.add("hidden");
-        document.querySelector(".modal-of-media").remove();
-    };
-        function onClickMedia () {
+        function onClickMedia() {
             document.querySelectorAll(`.m-modal-medias .m-thumbnail`).forEach(myFunction);
             const selectButton = document.querySelector(".m-select-button");
             selectButton.addEventListener("click", returnValue);
@@ -450,9 +453,15 @@
         // selectButton.addEventListener("click", returnValue);
 
         function returnValue() {
-            let selected = document.querySelector(".m-thumbnail.m-selected");
-            selectedItem.setAttribute('type', 'text');
-            selectedItem.value = selected.dataset.id;
+            let selected = document.querySelectorAll(".m-thumbnail.m-selected");
+            if (selected.length == 1) {
+                let po = selected[0].dataset.index;
+                selectedItem.dataset.src = data[po]["image"];
+                selectedItem.dataset.name = data[po]["original_path"];
+                selectedItem.setAttribute('type', 'text');
+                selectedItem.value = selected[0].dataset.id;
+                selectedItem.dispatchEvent(new Event('change'));
+            }
             closeModal();
         }
 
@@ -496,36 +505,37 @@
             item.remove();
         }
 
-    // }
+        // }
 
 
-</script>
+    </script>
 
-<script>
-    Dropzone.options.myAwesomeDropzone = {
-        success: function (file, response) {
-            //Here you can get your response.
-            let data1 = response.data;
-            let mThumbnail = document.createElement('div');
-            mThumbnail.classList.add("m-thumbnail");
-            mThumbnail.dataset.id = data1['id'];
-            mThumbnail.dataset.index = document.querySelectorAll('.m-modal-medias .m-thumbnail').length;
-            let mThumbnailImage = document.createElement('img');
-            mThumbnailImage.src = data1['image'];
+    <script>
+        Dropzone.options.myAwesomeDropzone = {
+            success: function (file, response) {
+                //Here you can get your response.
+                let data1 = response.data;
+                let mThumbnail = document.createElement('div');
+                mThumbnail.classList.add("m-thumbnail");
+                mThumbnail.dataset.id = data1['id'];
+                mThumbnail.dataset.index = document.querySelectorAll('.m-modal-medias .m-thumbnail').length;
+                let mThumbnailImage = document.createElement('img');
+                mThumbnailImage.src = data1['image'];
 
-            mThumbnail.appendChild(mThumbnailImage);
-            // mModalMedias.appendChild(mThumbnail);
-            let fst_item = document.querySelector('.m-modal-medias').firstChild;
-            document.querySelector('.m-modal-medias').insertBefore(mThumbnail, fst_item);
-            data.push(data1);
-            onClickMedia();
+                mThumbnail.appendChild(mThumbnailImage);
+                // mModalMedias.appendChild(mThumbnail);
+                let fst_item = document.querySelector('.m-modal-medias').firstChild;
+                document.querySelector('.m-modal-medias').insertBefore(mThumbnail, fst_item);
+                data.push(data1);
+                onClickMedia();
+            }
         }
-    }
-</script>
-<style>
-    .m-modal-medias, .m-thumbnail,
-    .m-modal-medias::after, .m-thumbnail::after,
-    .m-modal-medias::before,.m-thumbnail ::before {
-        box-sizing: unset;
-    }
-</style>
+    </script>
+    <style>
+        .m-modal-medias, .m-thumbnail,
+        .m-modal-medias::after, .m-thumbnail::after,
+        .m-modal-medias::before, .m-thumbnail ::before {
+            box-sizing: unset;
+        }
+    </style>
+@endauth

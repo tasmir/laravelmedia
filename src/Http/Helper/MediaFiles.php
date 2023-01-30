@@ -20,12 +20,12 @@ trait MediaFiles
             $data["extension"] = $file->getClientOriginalExtension();
             $file_name = Media::generateSlug($data["name"]).".".$data["extension"];
 
-            $path = $path ? $path : 'media';
-            $file->storeAs('public/'.$path, $file_name);
+            $path = $path ? $path : '';
+            $file->storeAs('public/media/'.$path, $file_name);
 //            return $path . "/" . $file_name;
-            $data['size'] = $this->getFileSize($path."/".$file_name);
-            $data['dimension'] = $this->getImageDimension(asset('storage/'.$path."/".$file_name));
-            $data["original_path"] = $path."/".$file_name;
+            $data['size'] = $this->getFileSize("media/".$path."/".$file_name);
+            $data['dimension'] = $this->getImageDimension(asset('storage/media/'.$path."/".$file_name));
+            $data["original_path"] = $path ? $path."/".$file_name : $file_name;
             return $data;
         }
 
